@@ -11,7 +11,7 @@ data class AppEntity(
     var appPackage : String? = null,
     var link : String? = null,
     var devKey : String? = null,
-    var organic : String? = null,
+    var organic : Boolean? = null,
     var banGeo : String? = null,
     var organicLink : String? = null,
 )

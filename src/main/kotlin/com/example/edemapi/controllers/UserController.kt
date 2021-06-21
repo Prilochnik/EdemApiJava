@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import javax.servlet.http.HttpServletRequest
 
 
 @RestController
@@ -19,9 +20,13 @@ class UserController(
 
 
     @PostMapping("/install")
-    fun install(@RequestBody jsonRequest : String) : ResponseEntity<InstallResponse>{
-        val request = objectMapper.readValue(jsonRequest, InstallRequest::class.java)
-        return ResponseEntity(InstallResponse(true, "testUser"), HttpStatus.ACCEPTED)
+    fun install(@RequestBody jsonRequest : String, request : HttpServletRequest) : ResponseEntity<InstallResponse>{
+        val installRequest = objectMapper.readValue(jsonRequest, InstallRequest::class.java)
+        val link = installService.getLink(installRequest, request.remoteAddr)
+        return if(link != null)
+            ResponseEntity(InstallResponse(true, installRequest.userId!!, link), HttpStatus.ACCEPTED)
+        else
+            ResponseEntity(InstallResponse(true, "testUser"), HttpStatus.ACCEPTED)
 
 
     }
