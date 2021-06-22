@@ -1,5 +1,6 @@
 package com.example.edemapi.entities
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -12,7 +13,8 @@ data class UserEntity (
         var appPackage : String? = null,
         var locale : String? = null,
         var ip : String? = null, //not in req
-        var date : String? = null, //not in req
+        @Temporal(TemporalType.TIMESTAMP)
+        var date : Date? = null, //not in req
         var campaign : String? = null,
         var campaignId : String? = null,
         var afAdset : String? = null,

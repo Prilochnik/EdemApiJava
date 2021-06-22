@@ -1,15 +1,15 @@
 package com.example.edemapi.entities.requests
 
 data class InstallRequest (
-        var userId : String? = null,
-        var appPackage : String? = null,
+        var user_id : String? = null,
+        var app_package : String? = null,
         var locale : String? = null,
         var campaign : String? = null,
-        var campaignId : String? = null,
-        var afAdset : String? = null,
-        var afAdsetId : String? = null,
-        var afAd : String? = null,
-        var pushToken : String? = null,
-        var afAdId : String? = null,
+        var campaign_id : String? = null,
+        var af_adset : String? = null,
+        var af_adset_id : String? = null,
+        var af_ad : String? = null,
+        var push_token : String? = null,
+        var adgroup_id : String? = null,
         var lang : String? = null,
 )
