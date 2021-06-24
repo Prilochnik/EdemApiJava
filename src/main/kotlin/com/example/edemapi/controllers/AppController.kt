@@ -1,11 +1,13 @@
 package com.example.edemapi.controllers
 
 import com.example.edemapi.entities.AppEntity
+import com.example.edemapi.entities.requests.InstallRequest
 import com.example.edemapi.entities.requests.app.AddAppRequest
 import com.example.edemapi.entities.requests.app.ChangeBanGeoRequest
 import com.example.edemapi.entities.requests.app.ChangeLinksRequest
 import com.example.edemapi.entities.response.InstallResponse
 import com.example.edemapi.service.AppService
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class AppController(
-        val appService : AppService
+        val appService : AppService,
+        val objectMapper: ObjectMapper
         ) {
 
     @PostMapping("/addApp")
@@ -31,9 +34,9 @@ class AppController(
     }
 
     @PostMapping("/organicOff")
-    fun organicOff(@RequestBody app_package : String) : ResponseEntity<String>{
-        println("appPackage$app_package")
-        appService.organicOff(app_package)
+    fun organicOff(@RequestBody app_package : Map<String, String>) : ResponseEntity<String>{
+       // val appPackage : Map<String, String> = objectMapper.readValue(jsonRequest, Map::class.java) as Map<String, String>
+        app_package["app_package"]?.let { appService.organicOff(it) }
         return ResponseEntity("Success", HttpStatus.ACCEPTED)
     }
 
@@ -44,8 +47,8 @@ class AppController(
     }
 
     @PostMapping("/organicOn")
-    fun organicOn(@RequestBody app_package : String) : ResponseEntity<String>{
-        appService.organicOn(app_package)
+    fun organicOn(@RequestBody app_package : Map<String, String>) : ResponseEntity<String>{
+        app_package["app_package"]?.let { appService.organicOn(it) }
         return ResponseEntity("Success", HttpStatus.ACCEPTED)
     }
 
