@@ -22,7 +22,8 @@ class AppService(
                     devKey = dev_key,
                     organic = organic,
                     banGeo = ban_geo,
-                    organicLink = organic_link
+                    organicLink = organic_link,
+                     authKey = auth_key
             )
         }
         appRepository.save(appEntity)

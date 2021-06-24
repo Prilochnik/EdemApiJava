@@ -32,6 +32,7 @@ class AppController(
 
     @PostMapping("/organicOff")
     fun organicOff(@RequestBody app_package : String) : ResponseEntity<String>{
+        println("appPackage$app_package")
         appService.organicOff(app_package)
         return ResponseEntity("Success", HttpStatus.ACCEPTED)
     }
