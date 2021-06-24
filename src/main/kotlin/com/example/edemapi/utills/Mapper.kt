@@ -17,6 +17,7 @@ object Mapper {
              pushToken  = installRequest.push_token,
              afAdId  = installRequest.adgroup_id,
              lang  = installRequest.lang,
+            mediaSource = installRequest.mediaSource
         )
 
 }

@@ -29,6 +29,7 @@ data class UserEntity (
         var geo : String? = null, //not in req
         var lang : String? = null,
         var pushId : String? = null, //not in req
+        var mediaSource : String? = null,
 
 
 )

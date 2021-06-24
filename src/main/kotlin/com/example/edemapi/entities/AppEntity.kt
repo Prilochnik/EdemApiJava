@@ -12,6 +12,9 @@ data class AppEntity(
     var link : String? = null,
     var devKey : String? = null,
     var organic : Boolean? = null,
+    @Column(length = 500)
     var banGeo : String? = null,
     var organicLink : String? = null,
+    @Column(length = 500)
+    var authKey : String? = null,
 )

@@ -7,5 +7,5 @@ data class AddAppRequest(
         val organic : Boolean? = null,
         val ban_geo : String? = null,
         val organic_link : String? = null,
-
+        val auth_key : String? = null
 )
