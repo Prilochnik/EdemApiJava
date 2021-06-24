@@ -36,6 +36,12 @@ class AppController(
         return ResponseEntity("Success", HttpStatus.ACCEPTED)
     }
 
+    @PostMapping("/deleteAppById")
+    fun deleteAppById(@RequestBody id : Long) : ResponseEntity<String>{
+        appService.deleteById(id)
+        return ResponseEntity("Success", HttpStatus.ACCEPTED)
+    }
+
     @PostMapping("/organicOn")
     fun organicOn(@RequestBody app_package : String) : ResponseEntity<String>{
         appService.organicOn(app_package)

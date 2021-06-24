@@ -28,6 +28,10 @@ class AppService(
         appRepository.save(appEntity)
     }
 
+    fun deleteById(id: Long){
+        appRepository.deleteById(id)
+    }
+
     fun showApps(): List<AppEntity> {
         val apps = appRepository.findAll()
         return apps.toList()
