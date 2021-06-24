@@ -15,12 +15,15 @@ data class UserEntity (
         var ip : String? = null, //not in req
         @Temporal(TemporalType.TIMESTAMP)
         var date : Date? = null, //not in req
+        @Column(length = 500)
         var campaign : String? = null,
         var campaignId : String? = null,
         var afAdset : String? = null,
         var afAdsetId : String? = null,
         var afAd : String? = null,
+        @Column(length = 1000)
         var result : String? = null, //not in req
+        @Column(length = 1000)
         var pushToken : String? = null,
         var afAdId : String? = null,
         var geo : String? = null, //not in req
