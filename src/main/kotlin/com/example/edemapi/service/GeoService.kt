@@ -12,7 +12,7 @@ class GeoService {
         val banGeo = banGeoStr.split(",")
         val geo = getGeoByIp(ip)
         geo?.let {
-            return Allow(geo, !banGeo.contains(geo))
+            return Allow(geo, !banGeo.contains(geo.country?.name_en))
         }
         return Allow(geo, true)
     }
