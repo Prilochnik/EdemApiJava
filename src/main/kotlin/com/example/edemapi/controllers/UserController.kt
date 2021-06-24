@@ -30,12 +30,12 @@ class UserController(
     fun install(@RequestBody jsonRequest : String, request : HttpServletRequest) : ResponseEntity<InstallResponse>{
         //println("servlet${request.remoteAddr}" )
         val installRequest = objectMapper.readValue(jsonRequest, InstallRequest::class.java)
-       // println(installRequest)
+        println("IP : ${request.remoteAddr}")
         val link = installService.getLink(installRequest, "176.122.117.188")//request.remoteAddr)
         return if(link != null)
             ResponseEntity(InstallResponse(true, installRequest.user_id!!, link), HttpStatus.ACCEPTED)
         else
-            ResponseEntity(InstallResponse(false, "testUser"), HttpStatus.ACCEPTED)
+            ResponseEntity(InstallResponse(false, installRequest.user_id!!), HttpStatus.ACCEPTED)
     }
 
     @GetMapping("/showUsers")
