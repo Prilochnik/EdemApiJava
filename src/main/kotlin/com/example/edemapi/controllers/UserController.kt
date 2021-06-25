@@ -30,8 +30,9 @@ class UserController(
         //println("servlet${request.remoteAddr}" )
         val installRequest = objectMapper.readValue(jsonRequest, InstallRequest::class.java)
         //println("IP : ${request.remoteAddr}")
-        val ipAddress = request.getHeader("X-FORWARDED-FOR")
-
+        var ipAddress = request.getHeader("X-FORWARDED-FOR")
+        if(ipAddress == null)
+            ipAddress = "127.0.0.1"
         val link = installService.getLink(installRequest, ipAddress)//request.remoteAddr)
         return if(link != null)
             ResponseEntity(InstallResponse(true, installRequest.user_id!!, link), HttpStatus.OK)
