@@ -8,6 +8,7 @@ data class AppEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private var id : Long? = null,
+    @Column(unique = true)
     var appPackage : String? = null,
     var link : String? = null,
     var devKey : String? = null,

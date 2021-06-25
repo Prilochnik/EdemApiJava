@@ -7,6 +7,6 @@ import java.util.*
 interface AppRepository : JpaRepository<AppEntity, Long> {
 
     fun findByAppPackage(appPackage: String) : Optional<AppEntity>
-
+    fun deleteByAppPackage(appPackage: String)
 
 }

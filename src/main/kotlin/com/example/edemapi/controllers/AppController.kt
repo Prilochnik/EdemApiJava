@@ -64,4 +64,10 @@ class AppController(
         return ResponseEntity("Success", HttpStatus.ACCEPTED)
     }
 
+    @PostMapping("/removeByAppPackage")
+    fun removeByAppPackage(@RequestBody app_package : Map<String, String>): ResponseEntity<String> {
+        appService.removeByPackage(app_package["app_package"].toString())
+        return ResponseEntity("success", HttpStatus.OK)
+    }
+
 }

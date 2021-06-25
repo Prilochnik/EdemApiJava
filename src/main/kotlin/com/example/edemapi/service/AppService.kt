@@ -64,4 +64,8 @@ class AppService(
         app.banGeo = changeBanGeoRequest.ban_geo
         appRepository.save(app)
     }
+
+    fun removeByPackage(appPackage: String){
+        appRepository.deleteByAppPackage(appPackage)
+    }
 }

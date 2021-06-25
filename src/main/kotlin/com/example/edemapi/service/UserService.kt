@@ -13,5 +13,18 @@ class UserService(
         return userRepository.findAll().toList()
     }
 
+    fun showUsersByPackage(appPackage : String) : List<UserEntity>{
+        return userRepository.findAllByAppPackage(appPackage)
+    }
+
+    fun pushTokenUpdate(userId : String, pushToken : String){
+        val user = userRepository.findAllByUserId(userId).last()
+        user.pushToken = pushToken
+        userRepository.save(user)
+
+    }
+
+
+
 
 }

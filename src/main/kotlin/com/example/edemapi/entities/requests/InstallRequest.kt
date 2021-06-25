@@ -11,6 +11,6 @@ data class InstallRequest (
         var af_ad : String? = null,
         var push_token : String? = null,
         var adgroup_id : String? = null,
-        var lang : String? = null,
+        var language : String? = null,
         var mediaSource : String? = null
 )

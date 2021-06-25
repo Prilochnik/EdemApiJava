@@ -14,10 +14,11 @@ import java.util.*
 
 @Service
 class InstallService(
-    val appRepository: AppRepository,
-    val userRepository: UserRepository,
-    val geoService: GeoService,
-    val blackNetRepository: BlackNetRepository
+    private val appRepository: AppRepository,
+    private val userRepository: UserRepository,
+    private val geoService: GeoService,
+    private val blackNetRepository: BlackNetRepository,
+    private val blackUserService: BlackUserService
 
 ) {
 
@@ -38,9 +39,13 @@ class InstallService(
                 return link
             }
             else { //organic
-                if(app.organic == false) return null
+                if(app.organic == false){
+                    blackUserService.addUser(user)
+                    return null
+                }
                 return if(app.banGeo != null && !geo.allow){
                     //бан гео не нулл или это гео в бане
+                    blackUserService.addUser(user)
                     null
                 }
                 else{
@@ -52,6 +57,7 @@ class InstallService(
         }
         else{
             //Bot
+            blackUserService.addUser(user)
             return null
         }
     }
