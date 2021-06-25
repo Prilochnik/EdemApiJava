@@ -28,7 +28,9 @@ data class UserEntity (
         var afAdId : String? = null,
         var geo : String? = null, //not in req
         var lang : String? = null,
-        var pushId : String? = null, //not in req
+        @ManyToOne(optional = true, cascade = [CascadeType.ALL])
+        @JoinColumn(name = "pushId")
+        var pushId : PushEntity? = null, //not in req
         var mediaSource : String? = null,
 
 

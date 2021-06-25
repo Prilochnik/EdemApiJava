@@ -30,7 +30,11 @@ class InstallService(
             //Not bot
             val app = appRepository.findByAppPackage(user.appPackage!!).orElseThrow { NoAppFoundException("Error in install") }
             val geo = geoService.checkGeo(ip, app.banGeo!!)
-            user.geo = geo.geo?.country?.name_en
+            try{
+                user.geo = geo.geo?.country?.name_en
+            } catch (e : Exception){
+                user.geo = null
+            }
             if(user.campaign != null){
                 //non organic
                 val link = createNonOrganicLink(app.link!!, user)

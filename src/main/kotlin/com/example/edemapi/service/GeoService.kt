@@ -18,7 +18,7 @@ class GeoService {
     }
 
     fun getGeoByIp(ip : String): Geo? {
-        return WebClient.create("https://api.sypexgeo.net")
+        return WebClient.create("https://ru2.sxgeo.city")
             .get()
             .uri("json/$ip")
             .retrieve()
