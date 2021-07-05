@@ -1,6 +1,7 @@
 package com.example.edemapi.service
 
 import com.example.edemapi.entities.AppEntity
+import com.example.edemapi.entities.PushEntity
 import com.example.edemapi.entities.UserEntity
 import com.example.edemapi.entities.requests.pushes.SingleGeoPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleLangPushRequest
@@ -9,6 +10,7 @@ import com.example.edemapi.models.CNotification
 import com.example.edemapi.models.GeoPush
 import com.example.edemapi.models.PushResponse
 import com.example.edemapi.repos.AppRepository
+import com.example.edemapi.repos.PushRepository
 import com.example.edemapi.repos.UserRepository
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
@@ -18,7 +20,8 @@ import reactor.core.publisher.Mono
 @Service
 class PushesService (
         private val userRepository: UserRepository,
-        private val appRepository: AppRepository
+        private val appRepository: AppRepository,
+        private val pushRepository: PushRepository
 ){
 
     fun singleGeoPush(pushRequest: SingleGeoPushRequest){
@@ -37,12 +40,24 @@ class PushesService (
         app.authKey?.let { authKey ->
             users.forEach { user ->
                 if(user.pushToken != null) {
-                    val a =pushRequest(authKey = authKey, GeoPush(user.pushToken!!, notif))//CNotification(title = pushRequest.title, body = pushRequest.body)))
+                    val a = pushRequest(authKey = authKey, GeoPush(user.pushToken!!, notif))//CNotification(title = pushRequest.title, body = pushRequest.body)))
                     println(a)
                 }
             }
             //pushRequest(authKey = it, GeoPush(""))
         }
+    }
+
+    fun addPush(pushEntity: PushEntity){
+        pushRepository.save(pushEntity)
+    }
+
+    fun showPushes() =
+            pushRepository.findAll().toList()
+
+
+    fun removePushById(id : Long){
+        pushRepository.deleteById(id)
     }
 
 

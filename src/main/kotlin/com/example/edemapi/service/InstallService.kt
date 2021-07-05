@@ -6,6 +6,7 @@ import com.example.edemapi.entities.requests.InstallRequest
 import com.example.edemapi.exceptions.customExceptions.NoAppFoundException
 import com.example.edemapi.repos.AppRepository
 import com.example.edemapi.repos.BlackNetRepository
+import com.example.edemapi.repos.PushRepository
 import com.example.edemapi.repos.UserRepository
 import com.example.edemapi.utills.Mapper
 import org.springframework.stereotype.Service
@@ -17,6 +18,7 @@ class InstallService(
     private val appRepository: AppRepository,
     private val userRepository: UserRepository,
     private val geoService: GeoService,
+    private val pushRepository: PushRepository,
     private val blackNetRepository: BlackNetRepository,
     private val blackUserService: BlackUserService
 
@@ -30,6 +32,7 @@ class InstallService(
             //Not bot
             val app = appRepository.findByAppPackage(user.appPackage!!).orElseThrow { NoAppFoundException("Error in install") }
             val geo = geoService.checkGeo(ip, app.banGeo!!)
+            setPush(user)
             try{
                 user.geo = geo.geo?.country?.name_en
             } catch (e : Exception){
@@ -66,8 +69,27 @@ class InstallService(
         }
     }
 
-
-
+    fun setPush(user : UserEntity){
+        pushRepository.findAll().forEach { push ->
+            if(push.appPackage == user.appPackage && push.geo == user.geo)
+                user.pushId = push
+            else {
+                if (push.appPackage == "all" && push.geo == user.geo)
+                    user.pushId = push
+                else{
+                    if(push.appPackage == "all" && push.lang == user.lang)
+                        user.pushId = push
+                    else{
+                        if(push.lang == user.lang)
+                            user.pushId = push
+                        else
+                            if(push.lang == "en")
+                                user.pushId = push
+                    }
+                }
+            }
+        }
+    }
 
     fun checkIp(ip : String) : Boolean{
         //todo get black ips and check
