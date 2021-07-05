@@ -18,6 +18,7 @@ class PushHelperService(
 
     @Scheduled(cron = "0 * * * * *")
     fun schedule(){
+        println("Schedule")
         appRepository.findAll().forEach { app ->
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
                 if(user.pushId!!.time!!.hour == Date().hours.toString()) {
