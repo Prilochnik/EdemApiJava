@@ -1,5 +1,9 @@
 package com.example.edemapi.entities
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonIdentityReference
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import javax.persistence.*
 
 @Entity
@@ -23,6 +27,9 @@ data class PushEntity(
         var appPackage : String? = null,
 
         @OneToMany(mappedBy = "pushId", fetch = FetchType.EAGER)
+        @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property="id")
+        @JsonIdentityReference(alwaysAsId = true)
+
         var users : List<UserEntity>? = null
 )
 

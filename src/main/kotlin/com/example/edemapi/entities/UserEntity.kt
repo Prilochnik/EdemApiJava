@@ -1,5 +1,9 @@
 package com.example.edemapi.entities
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonIdentityReference
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import java.util.*
 import javax.persistence.*
 
@@ -29,7 +33,10 @@ data class UserEntity (
         var geo : String? = null, //not in req
         var lang : String? = null,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
-        @JoinColumn(name = "pushId")
+        @JoinColumn(name = "push")
+        @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
+        @JsonIdentityReference(alwaysAsId = true)
+        @JsonIgnore
         var pushId : PushEntity? = null, //not in req
         var mediaSource : String? = null,
 

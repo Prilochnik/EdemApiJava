@@ -1,8 +1,10 @@
 package com.example.edemapi.utills
 
 import com.example.edemapi.entities.BlackUserEntity
+import com.example.edemapi.entities.PushEntity
 import com.example.edemapi.entities.UserEntity
 import com.example.edemapi.entities.requests.InstallRequest
+import com.example.edemapi.entities.requests.pushes.AddPushRequest
 
 object Mapper {
     fun mapInstallRequestToUserEntity(installRequest: InstallRequest) =
@@ -35,5 +37,15 @@ object Mapper {
                     afAdId  = userEntity.afAdId,
                     lang  = userEntity.lang,
                     mediaSource = userEntity.mediaSource
+            )
+
+    fun mapAddPushRequestToPushEntity(pushRequest: AddPushRequest) =
+            PushEntity(
+                    title = pushRequest.title,
+                    body = pushRequest.body,
+                    time = pushRequest.time,
+                    lang = pushRequest.lang,
+                    geo = pushRequest.geo,
+                    appPackage = pushRequest.appPackage
             )
 }

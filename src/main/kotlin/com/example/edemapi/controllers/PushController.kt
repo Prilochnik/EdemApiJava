@@ -1,5 +1,7 @@
 package com.example.edemapi.controllers
 
+import com.example.edemapi.entities.PushEntity
+import com.example.edemapi.entities.requests.pushes.AddPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleGeoPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleLangPushRequest
 import com.example.edemapi.service.PushesService
@@ -15,8 +17,19 @@ class PushController (
 ){
 
     @PostMapping("/addPush")
-    fun addPush(@RequestBody json : String){
+    fun addPush(@RequestBody push : AddPushRequest){
+        pushesService.addPush(push)
+    }
 
+    @PostMapping("/removePushById")
+    fun removePushById(@RequestBody id : Long){
+        pushesService.removePushById(id)
+    }
+
+    @PostMapping("/showPushes")
+    fun showPushes(): ResponseEntity<List<PushEntity>> {
+        val pushes = pushesService.showPushes()
+        return ResponseEntity(pushes, HttpStatus.OK)
     }
 
     @PostMapping("/singleGeoPush")

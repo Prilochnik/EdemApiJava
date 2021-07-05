@@ -3,6 +3,7 @@ package com.example.edemapi.service
 import com.example.edemapi.entities.AppEntity
 import com.example.edemapi.entities.PushEntity
 import com.example.edemapi.entities.UserEntity
+import com.example.edemapi.entities.requests.pushes.AddPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleGeoPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleLangPushRequest
 import com.example.edemapi.exceptions.customExceptions.NoAppFoundException
@@ -12,6 +13,7 @@ import com.example.edemapi.models.PushResponse
 import com.example.edemapi.repos.AppRepository
 import com.example.edemapi.repos.PushRepository
 import com.example.edemapi.repos.UserRepository
+import com.example.edemapi.utills.Mapper
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -48,8 +50,8 @@ class PushesService (
         }
     }
 
-    fun addPush(pushEntity: PushEntity){
-        pushRepository.save(pushEntity)
+    fun addPush(pushRequest: AddPushRequest){
+        pushRepository.save(Mapper.mapAddPushRequestToPushEntity(pushRequest))
     }
 
     fun showPushes() =
