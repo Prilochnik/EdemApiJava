@@ -35,8 +35,10 @@ class InstallService(
             setPush(user)
             try{
                 user.geo = geo.geo?.country?.name_en
+                user.locale = geo.geo?.country!!.utc.toString()
             } catch (e : Exception){
                 user.geo = null
+                user.locale = null
             }
             if(user.campaign != null){
                 //non organic
@@ -70,25 +72,49 @@ class InstallService(
     }
 
     fun setPush(user : UserEntity){
-        pushRepository.findAll().forEach { push ->
-            if(push.appPackage == user.appPackage && push.geo == user.geo)
+        val pushes = pushRepository.findAll()
+        pushes.forEach { push ->
+            if(user.pushId == null && push.appPackage == user.appPackage && push.geo == user.geo)
                 user.pushId = push
-            else {
-                if (push.appPackage == "all" && push.geo == user.geo)
-                    user.pushId = push
-                else{
-                    if(push.appPackage == "all" && push.lang == user.lang)
-                        user.pushId = push
-                    else{
-                        if(push.lang == user.lang)
-                            user.pushId = push
-                        else
-                            if(push.lang == "en")
-                                user.pushId = push
-                    }
-                }
-            }
         }
+        pushes.forEach { push ->
+            if(user.pushId == null && push.appPackage == "all" && push.geo == user.geo)
+                user.pushId = push
+        }
+        pushes.forEach { push ->
+            if(user.pushId == null && push.appPackage == "all" && push.lang == user.lang)
+                user.pushId = push
+        }
+        pushes.forEach { push ->
+            if(user.pushId == null && push.lang == user.lang)
+                user.pushId = push
+        }
+        pushes.forEach { push ->
+            if(user.pushId == null && push.lang == "en")
+                user.pushId = push
+        }
+//        pushRepository.findAll().forEach { push ->
+//            if(user.pushId == null){
+//                if(push.appPackage == user.appPackage && push.geo == user.geo)
+//                    user.pushId = push
+//                else {
+//                    if (push.appPackage == "all" && push.geo == user.geo)
+//                        user.pushId = push
+//                    else{
+//                        if(push.appPackage == "all" && push.lang == user.lang)
+//                            user.pushId = push
+//                        else{
+//                            if(push.lang == user.lang)
+//                                user.pushId = push
+//                            else
+//                                if(push.lang == "en")
+//                                    user.pushId = push
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
     }
 
     fun checkIp(ip : String) : Boolean{

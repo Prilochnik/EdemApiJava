@@ -10,11 +10,11 @@ class UserService(
 ) {
 
     fun showUsers(): List<UserEntity> {
-        return userRepository.findAll().toList()
+        return userRepository.findAll().toList().sortedBy { it.date }
     }
 
     fun showUsersByPackage(appPackage : String) : List<UserEntity>{
-        return userRepository.findAllByAppPackage(appPackage)
+        return userRepository.findAllByAppPackage(appPackage).sortedBy { it.date }
     }
 
     fun pushTokenUpdate(userId : String, pushToken : String){

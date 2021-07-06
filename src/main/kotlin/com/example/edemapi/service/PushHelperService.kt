@@ -21,7 +21,12 @@ class PushHelperService(
         println("Schedule")
         appRepository.findAll().forEach { app ->
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
-                if(user.pushId!!.time!!.hour == Date().hours.toString()) {
+                val userTime =
+                    if(user.locale != null)
+                        (user.pushId!!.time!!.hour.toInt() + user.locale!!.toInt()).toString()
+                    else
+                        user.pushId!!.time!!.hour
+                if(userTime == Date().hours.toString()) {
                     val push = GeoPush(
                             to = user.pushToken!!,
                             notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
