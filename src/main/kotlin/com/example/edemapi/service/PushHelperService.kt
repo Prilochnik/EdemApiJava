@@ -23,7 +23,7 @@ class PushHelperService(
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
                 val userTime =
                     if(user.locale != null)
-                        (user.pushId!!.time!!.hour.toInt() + user.locale!!.toInt()).toString()
+                        (user.pushId!!.time!!.hour.toInt() - user.locale!!.toInt()).toString()
                     else
                         user.pushId!!.time!!.hour
                 if(userTime == Date().hours.toString()) {
