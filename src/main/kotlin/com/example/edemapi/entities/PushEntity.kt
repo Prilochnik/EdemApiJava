@@ -11,7 +11,7 @@ import javax.persistence.*
 data class PushEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        private val id : Long? = null,
+        val id : Long? = null,
         @Column(length = 1000)
         var title : String? = null,
         @Column(length = 1000)

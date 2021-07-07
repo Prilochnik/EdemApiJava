@@ -17,13 +17,15 @@ class PushController (
 ){
 
     @PostMapping("/addPush")
-    fun addPush(@RequestBody push : AddPushRequest){
+    fun addPush(@RequestBody push : AddPushRequest): ResponseEntity<String> {
         pushesService.addPush(push)
+        return ResponseEntity("Ok", HttpStatus.ACCEPTED)
     }
 
     @PostMapping("/removePushById")
-    fun removePushById(@RequestBody id : Long){
+    fun removePushById(@RequestBody id : Long): ResponseEntity<String>{
         pushesService.removePushById(id)
+        return ResponseEntity("Ok", HttpStatus.ACCEPTED)
     }
 
     @PostMapping("/showPushes")
