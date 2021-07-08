@@ -12,7 +12,7 @@ import javax.persistence.*
 data class UserEntity (
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        private var id : Long? = null,
+        var id : Long? = null,
         var userId : String? = null,
         var appPackage : String? = null,
         var locale : String? = null,
