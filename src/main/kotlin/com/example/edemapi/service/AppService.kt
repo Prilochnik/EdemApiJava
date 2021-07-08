@@ -66,6 +66,8 @@ class AppService(
     }
 
     fun removeByPackage(appPackage: String){
-        appRepository.deleteByAppPackage(appPackage)
+        val app = appRepository.findByAppPackage(appPackage).orElseThrow { NoAppFoundException("Error while deleting app") }
+        appRepository.delete(app)
+        //appRepository.deleteByAppPackage(appPackage)
     }
 }

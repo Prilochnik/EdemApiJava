@@ -35,14 +35,14 @@ class AppController(
 
     @PostMapping("/organicOff")
     fun organicOff(@RequestBody app_package : Map<String, String>) : ResponseEntity<String>{
-       // val appPackage : Map<String, String> = objectMapper.readValue(jsonRequest, Map::class.java) as Map<String, String>
+       // val appPackage : Map<String, String> = objectMapper.readValue(jsonRequest, Map::class.java)K` as Map<String, String>
         app_package["app_package"]?.let { appService.organicOff(it) }
         return ResponseEntity("Success", HttpStatus.ACCEPTED)
     }
 
     @PostMapping("/deleteAppById")
-    fun deleteAppById(@RequestBody id : Long) : ResponseEntity<String>{
-        appService.deleteById(id)
+    fun deleteAppById(@RequestBody json : Map<String, String>) : ResponseEntity<String>{
+        appService.deleteById(json["id"]!!.toLong())
         return ResponseEntity("Success", HttpStatus.ACCEPTED)
     }
 
