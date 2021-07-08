@@ -7,6 +7,7 @@ import com.example.edemapi.entities.requests.pushes.AddPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleGeoPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleLangPushRequest
 import com.example.edemapi.exceptions.customExceptions.NoAppFoundException
+import com.example.edemapi.exceptions.customExceptions.NoPushFoundException
 import com.example.edemapi.models.CNotification
 import com.example.edemapi.models.GeoPush
 import com.example.edemapi.models.PushResponse
@@ -59,7 +60,11 @@ class PushesService (
 
 
     fun removePushById(id : Long){
-        pushRepository.deleteById(id)
+        val push = pushRepository.findById(id).orElseThrow{ NoPushFoundException("Error while found push to remove") }
+        push.users!!.forEach {
+            it.pushId = null
+        }
+        pushRepository.delete(push)
     }
 
 

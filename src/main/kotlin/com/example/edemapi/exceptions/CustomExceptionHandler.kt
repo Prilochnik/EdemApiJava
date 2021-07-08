@@ -2,6 +2,7 @@ package com.example.edemapi.exceptions
 
 import com.example.edemapi.exceptions.customExceptions.DecodeOptimizationStatusException
 import com.example.edemapi.exceptions.customExceptions.NoAppFoundException
+import com.example.edemapi.exceptions.customExceptions.NoPushFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -21,6 +22,13 @@ class CustomExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(DecodeOptimizationStatusException::class)
     fun handleErrorDecodeOptimizationStatusException(ex : DecodeOptimizationStatusException): ResponseEntity<ApiError> {
         val errorMsg = "Error while try to decode status in event"
+        val err = ApiError(HttpStatus.BAD_REQUEST, ex.localizedMessage, errorMsg)
+        return ResponseEntity(err, err.status)
+    }
+
+    @ExceptionHandler(NoPushFoundException::class)
+    fun handleNoPushFoundException(ex : NoPushFoundException) : ResponseEntity<Any> {
+        val errorMsg = "Error while try to find push"
         val err = ApiError(HttpStatus.BAD_REQUEST, ex.localizedMessage, errorMsg)
         return ResponseEntity(err, err.status)
     }
