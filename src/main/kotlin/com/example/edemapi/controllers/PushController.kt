@@ -23,8 +23,9 @@ class PushController (
     }
 
     @PostMapping("/removePushById")
-    fun removePushById(@RequestBody id : Long): ResponseEntity<String>{
-        pushesService.removePushById(id)
+    fun removePushById(@RequestBody json : Map<String, String>): ResponseEntity<String>{
+        println(json["id"])
+        pushesService.removePushById(json["id"]!!.toLong())
         return ResponseEntity("Ok", HttpStatus.ACCEPTED)
     }
 
