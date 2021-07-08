@@ -32,7 +32,7 @@ class InstallService(
             //Not bot
             val app = appRepository.findByAppPackage(user.appPackage!!).orElseThrow { NoAppFoundException("Error in install") }
             val geo = geoService.checkGeo(ip, app.banGeo!!)
-            setPush(user)
+
             try{
                 user.geo = geo.geo?.country?.name_en
                 user.locale = geo.geo?.country!!.utc.toString()
@@ -40,6 +40,7 @@ class InstallService(
                 user.geo = null
                 user.locale = null
             }
+            setPush(user)
             if(user.campaign != null){
                 //non organic
                 val link = createNonOrganicLink(app.link!!, user)
@@ -52,7 +53,7 @@ class InstallService(
                     blackUserService.addUser(user)
                     return null
                 }
-                return if(app.banGeo != null && !geo.allow){
+                return if(app.banGeo != null && geo.allow){
                     //бан гео не нулл или это гео в бане
                     blackUserService.addUser(user)
                     null

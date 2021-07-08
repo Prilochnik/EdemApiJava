@@ -21,22 +21,24 @@ class PushHelperService(
         println("Schedule")
         appRepository.findAll().forEach { app ->
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
-                val userTime =
-                    if(user.locale != null){
-                            try {
-                                (user.pushId!!.time!!.hour.toInt() - user.locale!!.toInt()).toString()
-                            } catch (e : Exception) {
-                                user.pushId!!.time!!.hour
+                if(user.pushId != null && user.pushToken != null){
+                    val userTime =
+                            if(user.locale != null){
+                                try {
+                                    (user.pushId!!.time!!.hour.toInt() - user.locale!!.toInt()).toString()
+                                } catch (e : Exception) {
+                                    user.pushId!!.time!!.hour
+                                }
                             }
+                            else
+                                user.pushId!!.time!!.hour
+                    if(userTime == Date().hours.toString()) {
+                        val push = GeoPush(
+                                to = user.pushToken!!,
+                                notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
+                        )
+                        pushesService.pushRequest(authKey = app.authKey!!, bodyGeo = push)
                     }
-                    else
-                        user.pushId!!.time!!.hour
-                if(userTime == Date().hours.toString()) {
-                    val push = GeoPush(
-                            to = user.pushToken!!,
-                            notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
-                    )
-                    pushesService.pushRequest(authKey = app.authKey!!, bodyGeo = push)
                 }
             }
         }
