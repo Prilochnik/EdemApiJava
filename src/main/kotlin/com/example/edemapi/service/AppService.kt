@@ -35,7 +35,7 @@ class AppService(
 
     fun showApps(): List<AppEntity> {
         val apps = appRepository.findAll()
-        return apps.toList()
+        return apps.toList().sortedBy { it.id }
     }
 
     fun organicOff(app_package : String){

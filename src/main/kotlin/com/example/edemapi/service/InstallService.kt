@@ -26,11 +26,12 @@ class InstallService(
 
     fun getLink(installRequest: InstallRequest, ip : String) : String?{
         val user = Mapper.mapInstallRequestToUserEntity(installRequest)
-        user.date =  Date()
+        val app = appRepository.findByAppPackage(user.appPackage!!).orElseThrow { NoAppFoundException("Error in install") }
+        user.date = Date()
         user.ip = ip
         if(checkIp(ip)){
             //Not bot
-            val app = appRepository.findByAppPackage(user.appPackage!!).orElseThrow { NoAppFoundException("Error in install") }
+
             val geo = geoService.checkGeo(ip, app.banGeo!!)
 
             try{
@@ -67,6 +68,8 @@ class InstallService(
         }
         else{
             //Bot
+            val geo = geoService.checkGeo(ip, app.banGeo!!)
+            user.geo = geo.geo?.country?.name_en
             blackUserService.addUser(user)
             return null
         }

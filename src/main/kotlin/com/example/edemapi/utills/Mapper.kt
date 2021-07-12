@@ -5,6 +5,7 @@ import com.example.edemapi.entities.PushEntity
 import com.example.edemapi.entities.UserEntity
 import com.example.edemapi.entities.requests.InstallRequest
 import com.example.edemapi.entities.requests.pushes.AddPushRequest
+import com.example.edemapi.entities.requests.pushes.ChangePushRequest
 
 object Mapper {
     fun mapInstallRequestToUserEntity(installRequest: InstallRequest) =
@@ -28,6 +29,10 @@ object Mapper {
                     userId = userEntity.userId,
                     appPackage = userEntity.appPackage,
                     locale  = userEntity.locale,
+                    ip = userEntity.ip,
+                    date = userEntity.date,
+                    geo = userEntity.geo,
+                    result = userEntity.result,
                     campaign  = userEntity.campaign,
                     campaignId  = userEntity.campaignId,
                     afAdset  = userEntity.afAdset,
@@ -47,5 +52,15 @@ object Mapper {
                     lang = pushRequest.lang,
                     geo = pushRequest.geo,
                     appPackage = pushRequest.appPackage
+            )
+
+    fun mapChangePushRequestToPushEntity(changePushRequest: ChangePushRequest) =
+            PushEntity(
+                    title = changePushRequest.title,
+                    body = changePushRequest.body,
+                    time = changePushRequest.time,
+                    lang = changePushRequest.lang,
+                    geo = changePushRequest.geo,
+                    appPackage = changePushRequest.appPackage
             )
 }

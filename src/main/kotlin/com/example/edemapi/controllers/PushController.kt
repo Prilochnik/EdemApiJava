@@ -2,9 +2,11 @@ package com.example.edemapi.controllers
 
 import com.example.edemapi.entities.PushEntity
 import com.example.edemapi.entities.requests.pushes.AddPushRequest
+import com.example.edemapi.entities.requests.pushes.ChangePushRequest
 import com.example.edemapi.entities.requests.pushes.SingleGeoPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleLangPushRequest
 import com.example.edemapi.service.PushesService
+import com.example.edemapi.utills.Mapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -37,9 +39,13 @@ class PushController (
 
     @PostMapping("/singleGeoPush")
     fun singleGeoPush(@RequestBody singleGeoPushRequest: SingleGeoPushRequest): ResponseEntity<String> {
-        println(singleGeoPushRequest)
         pushesService.singleGeoPush(singleGeoPushRequest)
         return ResponseEntity("Я Пропушил, если кому-то что-то не дошло, вл всем виноваты ебаные сяоми", HttpStatus.OK)
+    }
+
+    @PostMapping("/changePushById")
+    fun changePushById(@RequestBody push : ChangePushRequest){
+        pushesService.changePushById(pushEntity = Mapper.mapChangePushRequestToPushEntity(push), pushId = push.id.toLong())
     }
 
     @PostMapping("/singleLangPush")

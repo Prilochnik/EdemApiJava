@@ -55,8 +55,21 @@ class PushesService (
         pushRepository.save(Mapper.mapAddPushRequestToPushEntity(pushRequest))
     }
 
+    fun changePushById(pushEntity: PushEntity, pushId : Long){
+        val push = pushRepository.findById(pushId).orElseThrow { NoPushFoundException("Error in change Push") }
+        push.apply {
+            appPackage = pushEntity.appPackage
+            body = pushEntity.body
+            title = pushEntity.title
+            time = pushEntity.time
+            lang = pushEntity.lang
+            geo = pushEntity.geo
+        }
+        pushRepository.save(push)
+    }
+
     fun showPushes() =
-            pushRepository.findAll().toList()
+            pushRepository.findAll().toList().sortedBy { it.id }
 
 
     fun removePushById(id : Long){

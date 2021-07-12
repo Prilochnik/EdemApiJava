@@ -7,6 +7,7 @@ import com.example.edemapi.repos.UserRepository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Service
@@ -16,9 +17,8 @@ class PushHelperService(
         val pushesService: PushesService
 ) {
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 * * * * *")
     fun schedule(){
-        println("Schedule")
         appRepository.findAll().forEach { app ->
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
                 if(user.pushId != null && user.pushToken != null){
@@ -32,7 +32,7 @@ class PushHelperService(
                             }
                             else
                                 user.pushId!!.time!!.hour
-                    if(userTime == Date().hours.toString()) {
+                    if(userTime == SimpleDateFormat("H").apply { timeZone = TimeZone.getTimeZone("UTC") }.format(Date())) {
                         val push = GeoPush(
                                 to = user.pushToken!!,
                                 notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
