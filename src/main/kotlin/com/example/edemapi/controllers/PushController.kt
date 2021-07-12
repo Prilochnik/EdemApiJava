@@ -5,6 +5,7 @@ import com.example.edemapi.entities.requests.pushes.AddPushRequest
 import com.example.edemapi.entities.requests.pushes.ChangePushRequest
 import com.example.edemapi.entities.requests.pushes.SingleGeoPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleLangPushRequest
+import com.example.edemapi.entities.response.ShowPushResponse
 import com.example.edemapi.service.PushesService
 import com.example.edemapi.utills.Mapper
 import org.springframework.http.HttpStatus
@@ -32,8 +33,14 @@ class PushController (
     }
 
     @PostMapping("/showPushes")
-    fun showPushes(): ResponseEntity<List<PushEntity>> {
+    fun showPushes(): ResponseEntity<List<ShowPushResponse>> {
         val pushes = pushesService.showPushes()
+        return ResponseEntity(pushes, HttpStatus.OK)
+    }
+
+    @PostMapping("/showPushesDetails")
+    fun showPushesDetails(): ResponseEntity<List<PushEntity>> {
+        val pushes = pushesService.showPushesDetails()
         return ResponseEntity(pushes, HttpStatus.OK)
     }
 

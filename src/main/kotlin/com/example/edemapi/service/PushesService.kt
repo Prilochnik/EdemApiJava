@@ -6,6 +6,7 @@ import com.example.edemapi.entities.UserEntity
 import com.example.edemapi.entities.requests.pushes.AddPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleGeoPushRequest
 import com.example.edemapi.entities.requests.pushes.SingleLangPushRequest
+import com.example.edemapi.entities.response.ShowPushResponse
 import com.example.edemapi.exceptions.customExceptions.NoAppFoundException
 import com.example.edemapi.exceptions.customExceptions.NoPushFoundException
 import com.example.edemapi.models.CNotification
@@ -68,7 +69,7 @@ class PushesService (
         pushRepository.save(push)
     }
 
-    fun showPushes() =
+    fun showPushesDetails() =
             pushRepository.findAll().toList().sortedBy { it.id }
 
 
@@ -79,6 +80,11 @@ class PushesService (
         }
         pushRepository.delete(push)
     }
+
+    fun showPushes() =
+            pushRepository.findAll().toList().map {
+                ShowPushResponse(it.id, it.title, it.body, it.time, it.lang, it.geo, it.appPackage)
+            }.sortedBy { it.id }
 
 
     fun pushRequest(authKey : String, bodyGeo : GeoPush) =
