@@ -22,24 +22,22 @@ class PushHelperService(
         appRepository.findAll().forEach { app ->
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
                 if(user.pushId != null && user.pushToken != null){
-                    user.pushId!!.time!!.hour.split("|").forEach { hour ->
-                        val userTime =
-                                if(user.locale != null){
-                                    try {
-                                        (hour.toInt() - user.locale!!.toInt()).toString()
-                                    } catch (e : Exception) {
-                                        hour
-                                    }
+                    val userTime =
+                            if(user.locale != null){
+                                try {
+                                    (user.pushId!!.time!!.hour.toInt() - user.locale!!.toInt()).toString()
+                                } catch (e : Exception) {
+                                    user.pushId!!.time!!.hour
                                 }
-                                else
-                                    hour
-                        if(userTime == SimpleDateFormat("H").apply { timeZone = TimeZone.getTimeZone("UTC") }.format(Date())) {
-                            val push = GeoPush(
-                                    to = user.pushToken!!,
-                                    notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
-                            )
-                            pushesService.pushRequest(authKey = app.authKey!!, bodyGeo = push)
-                        }
+                            }
+                            else
+                                user.pushId!!.time!!.hour
+                    if(userTime == SimpleDateFormat("H").apply { timeZone = TimeZone.getTimeZone("UTC") }.format(Date())) {
+                        val push = GeoPush(
+                                to = user.pushToken!!,
+                                notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
+                        )
+                        pushesService.pushRequest(authKey = app.authKey!!, bodyGeo = push)
                     }
                 }
             }
