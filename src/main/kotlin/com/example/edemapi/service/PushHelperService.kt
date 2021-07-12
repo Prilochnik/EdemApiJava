@@ -17,27 +17,29 @@ class PushHelperService(
         val pushesService: PushesService
 ) {
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     fun schedule(){
         appRepository.findAll().forEach { app ->
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
                 if(user.pushId != null && user.pushToken != null){
-                    val userTime =
-                            if(user.locale != null){
-                                try {
-                                    (user.pushId!!.time!!.hour.toInt() - user.locale!!.toInt()).toString()
-                                } catch (e : Exception) {
-                                    user.pushId!!.time!!.hour
+                    user.pushId!!.time!!.hour.split("|").forEach { hour ->
+                        val userTime =
+                                if(user.locale != null){
+                                    try {
+                                        (hour.toInt() - user.locale!!.toInt()).toString()
+                                    } catch (e : Exception) {
+                                        hour
+                                    }
                                 }
-                            }
-                            else
-                                user.pushId!!.time!!.hour
-                    if(userTime == SimpleDateFormat("H").apply { timeZone = TimeZone.getTimeZone("UTC") }.format(Date())) {
-                        val push = GeoPush(
-                                to = user.pushToken!!,
-                                notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
-                        )
-                        pushesService.pushRequest(authKey = app.authKey!!, bodyGeo = push)
+                                else
+                                    hour
+                        if(userTime == SimpleDateFormat("H").apply { timeZone = TimeZone.getTimeZone("UTC") }.format(Date())) {
+                            val push = GeoPush(
+                                    to = user.pushToken!!,
+                                    notification = CNotification(body = spintaxParse(user.pushId?.body!!), title = spintaxParse(user.pushId?.title!!))
+                            )
+                            pushesService.pushRequest(authKey = app.authKey!!, bodyGeo = push)
+                        }
                     }
                 }
             }
