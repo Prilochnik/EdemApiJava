@@ -17,7 +17,7 @@ class PushHelperService(
         val pushesService: PushesService
 ) {
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     fun schedule(){
         appRepository.findAll().forEach { app ->
             userRepository.findAllByAppPackage(app.appPackage!!).forEach { user ->
