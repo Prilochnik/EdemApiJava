@@ -29,49 +29,49 @@ class InstallService(
         val app = appRepository.findByAppPackage(user.appPackage!!).orElseThrow { NoAppFoundException("Error in install") }
         user.date = Date()
         user.ip = ip
-        if(checkIp(ip)){
-            //Not bot
 
-            val geo = geoService.checkGeo(ip, app.banGeo!!)
+        val geo = geoService.checkGeo(ip, app.banGeo!!)
 
-            try{
-                user.geo = geo.geo?.country?.name_en
-                user.locale = geo.geo?.country!!.utc.toString()
-            } catch (e : Exception){
-                user.geo = null
-                user.locale = null
+        try{
+            user.geo = geo.geo?.country?.name_en
+            user.locale = geo.geo?.country!!.utc.toString()
+        } catch (e : Exception){
+            user.geo = null
+            user.locale = null
+        }
+        setPush(user)
+        if(user.campaign != null){
+            //non organic
+            val link = createNonOrganicLink(app.link!!, user)
+            user.result = "true | $link "
+            userRepository.save(user)
+            return link
+        }
+        else { //organic
+            if(app.organic == false){
+                blackUserService.addUser(user)
+                return null
             }
-            setPush(user)
-            if(user.campaign != null){
-                //non organic
-                val link = createNonOrganicLink(app.link!!, user)
-                user.result = "true | $link "
-                userRepository.save(user)
-                return link
+            return if(app.banGeo != null && geo.allow){
+                //бан гео не нулл или это гео в бане
+                blackUserService.addUser(user)
+                null
             }
-            else { //organic
-                if(app.organic == false){
-                    blackUserService.addUser(user)
-                    return null
-                }
-                return if(app.banGeo != null && geo.allow){
-                    //бан гео не нулл или это гео в бане
-                    blackUserService.addUser(user)
-                    null
-                }
-                else{
+            else{
+                if(checkIp(ip)){
                     user.result = "true | ${app.organicLink} "
                     userRepository.save(user)
                     app.organicLink
                 }
+                else{
+                    //Bot
+                    val geo = geoService.checkGeo(ip, app.banGeo!!)
+                    user.geo = geo.geo?.country?.name_en
+                    blackUserService.addUser(user)
+                    return null
+                }
             }
-        }
-        else{
-            //Bot
-            val geo = geoService.checkGeo(ip, app.banGeo!!)
-            user.geo = geo.geo?.country?.name_en
-            blackUserService.addUser(user)
-            return null
+
         }
     }
 
