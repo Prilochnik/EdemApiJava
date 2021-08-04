@@ -81,6 +81,10 @@ class InstallService(
             if(user.pushId == null && push.appPackage == user.appPackage && push.geo == user.geo)
                 user.pushId = push
         }
+        pushes.forEach {  push ->
+            if(user.pushId == null && push.appPackage == user.appPackage)
+                user.pushId = push
+        }
         pushes.forEach { push ->
             if(user.pushId == null && push.appPackage == "all" && push.geo == user.geo)
                 user.pushId = push
@@ -165,7 +169,7 @@ class InstallService(
 
     fun createNonOrganicLink(host : String, user : UserEntity) : String {
         val endLink = naming(user.campaign!!)
-        return "$host?af_id=${user.userId}&app_name=${user.appPackage}&с=${user.campaign}&af_c_id=${user.campaignId}&af_adset=${user.afAdset}&af_adset_id=${user.afAdsetId}&af_ad=${user.afAd}&af_ad_id=${user.afAdId}&$endLink"
+        return "$host?af_id=${user.userId}&app_name=${user.appPackage}&с=${user.campaign}&af_c_id=${user.campaignId}&af_adset_id=${user.afAdsetId}&af_ad_id=${user.afAdId}&$endLink&af_ad=${user.afAd}&af_adset=${user.afAdset}"
     }
 
     fun naming(c : String) =
