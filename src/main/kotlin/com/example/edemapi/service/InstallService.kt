@@ -33,7 +33,7 @@ class InstallService(
         val geo = geoService.checkGeo(ip, app.banGeo!!)
 
         try{
-            user.geo = geo.geo?.country?.name_en
+            user.geo = geo.geo?.country?.iso
             user.locale = geo.geo?.country!!.utc.toString()
         } catch (e : Exception){
             user.geo = null
@@ -169,7 +169,7 @@ class InstallService(
 
     fun createNonOrganicLink(host : String, user : UserEntity) : String {
         val endLink = naming(user.campaign!!)
-        return "$host?af_id=${user.userId}&app_name=${user.appPackage}&с=${user.campaign}&af_c_id=${user.campaignId}&af_adset_id=${user.afAdsetId}&af_ad_id=${user.afAdId}&$endLink&af_ad=${user.afAd}&af_adset=${user.afAdset}"
+        return "$host?af_id=${user.userId}&app_name=${user.appPackage}&с=${user.campaign}&af_c_id=${user.campaignId}&af_adset_id=${user.afAdsetId}&af_ad_id=${user.afAdId}&$endLink&fcm_token=${user.pushToken}&media_source=${user.mediaSource}af_ad=${user.afAd}&af_adset=${user.afAdset}"
     }
 
     fun naming(c : String) =
