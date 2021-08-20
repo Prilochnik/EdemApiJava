@@ -40,6 +40,7 @@ data class UserEntity (
         @JsonIgnore
         var pushId : PushEntity? = null, //not in req
         var mediaSource : String? = null,
+       // var gyroscope : String? = null
 
 
 )

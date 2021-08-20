@@ -18,4 +18,7 @@ data class AppEntity(
     var organicLink : String? = null,
     @Column(length = 500)
     var authKey : String? = null,
+    var appIde  : String? = null,
+    var status : String? = null,
+    var appName : String? = null,
 )

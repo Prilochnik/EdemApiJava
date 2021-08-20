@@ -33,6 +33,16 @@ class AppController(
         return ResponseEntity(apps, HttpStatus.ACCEPTED)
     }
 
+    @PostMapping("/changeStatus")
+    fun changeStatus(@RequestBody body : Map<String, String>) : ResponseEntity<String> {
+        body["app_package"]?.let {
+            body["status"]?.let {
+                    it1 -> appService.changeAppStatusByPackage(it, it1)
+            }
+        }
+        return ResponseEntity("Success", HttpStatus.ACCEPTED)
+    }
+
     @PostMapping("/organicOff")
     fun organicOff(@RequestBody app_package : Map<String, String>) : ResponseEntity<String>{
        // val appPackage : Map<String, String> = objectMapper.readValue(jsonRequest, Map::class.java)K` as Map<String, String>

@@ -38,6 +38,12 @@ class AppService(
         return apps.toList().sortedBy { it.id }
     }
 
+    fun changeAppStatusByPackage(app_package: String, status : String){
+        val app = appRepository.findByAppPackage(app_package).orElseThrow { NoAppFoundException("Error in change status") }
+        app.status = status
+        appRepository.save(app)
+    }
+
     fun organicOff(app_package : String){
         val app = appRepository.findByAppPackage(app_package).orElseThrow { NoAppFoundException("Error in change organic") }
         app.organic = false
