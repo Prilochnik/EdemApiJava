@@ -29,13 +29,16 @@ class InstallService(
         val app = appRepository.findByAppPackage(user.appPackage!!).orElseThrow { NoAppFoundException("Error in install") }
         user.date = Date()
         user.ip = ip
-
+        println("IP : $ip")
         val geo = geoService.checkGeo(ip, app.banGeo!!)
-
+        println("GEO : $geo")
         try{
             user.geo = geo.geo?.country?.iso
+            println("USER GEO : ${user.geo}")
             user.locale = geo.geo?.country!!.utc.toString()
         } catch (e : Exception){
+            println("EXCEPTION : $e")
+            e.printStackTrace()
             user.geo = null
             user.locale = null
         }
@@ -44,16 +47,19 @@ class InstallService(
             //non organic
             val link = createNonOrganicLink(app.link!!, user)
             user.result = "true | $link "
+            println("WHITE HERE 0")
             userRepository.save(user)
             return link
         }
         else { //organic
             if(app.organic == false){
+                println("BLACK HERE 1")
                 blackUserService.addUser(user)
                 return null
             }
             return if(app.banGeo != null && geo.allow){
                 //бан гео не нулл или это гео в бане
+                println("BLACK HERE 2")
                 blackUserService.addUser(user)
                 null
             }
@@ -61,12 +67,14 @@ class InstallService(
                 if(checkIp(ip)){
                     user.result = "true | ${app.organicLink} "
                     userRepository.save(user)
+                    println("WHITE HERE 1")
                     app.organicLink
                 }
                 else{
                     //Bot
                     val geo = geoService.checkGeo(ip, app.banGeo!!)
-                    user.geo = geo.geo?.country?.name_en
+                    user.geo = geo.geo?.country?.iso
+                    println("BLACK HERE 3")
                     blackUserService.addUser(user)
                     return null
                 }
